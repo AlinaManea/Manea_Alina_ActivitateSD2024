@@ -1,0 +1,225 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<malloc.h>
+
+//1. structura
+struct Automobil
+{
+	char* denumire;
+	int nrRoti;
+	float pret;
+
+};
+
+//2. fct cititre
+//struct Automobil citire() {
+//	struct Automobil a;
+//
+//	char nume[100];
+//	printf("Introduceti denumirea:");
+//	scanf("%s", &nume);
+//	a.denumire = (char*)malloc(sizeof(char) * (strlen(nume) + 1));
+//	strcpy(a.denumire, nume);
+//
+//	printf("Introduceti nr roti:");
+//	scanf("%d", &a.nrRoti);
+//	printf("Introduceti pret:");
+//	scanf("%f", &a.pret);
+//
+//	return a;
+//}
+
+//3. functie calcul medie pret
+
+float maximPret(struct Automobil* automobile, int nrAutomobile)
+{
+	float maxim = automobile[0].pret;
+	for (int i = 0; i < nrAutomobile; i++)
+	{
+		if (automobile[i].pret > maxim)
+			maxim = automobile[i].pret;
+	}
+	return maxim;
+}
+
+//5. afisare
+void afisare(struct Automobil a)
+{
+	printf("Automobilul %s are %d roti si pretul de %5.2f.\n", a.denumire, a.nrRoti, a.pret);
+
+}
+
+//4.modificare camp din obiect
+
+void modificare(struct Automobil* a, float pretNou)
+{
+
+     a->pret = pretNou;
+
+}
+
+
+//INITIALIZARE
+struct Automobil initializare(const char* nume, int nrroti, float pret)
+{
+	struct Automobil a;
+	a.nrRoti = nrroti;
+	a.pret = pret;
+	a.denumire = (char*)malloc(sizeof(char) * (strlen(nume) + 1));
+	strcpy(a.denumire, nume);
+	return a;
+}
+
+//Creare nou vector care copiaza dintr un vect primit ca param ob care indeplinesc
+//o anumita conditie
+struct Automobil* vectorCopiat(struct Automobil* a, int pragRoti, int nrAutomobil, int *dim)
+{
+	
+
+	if (a != NULL)
+	{
+		for (int i = 0; i < nrAutomobil; i++)
+			if (a[i].nrRoti < pragRoti)
+				(*dim)++;
+
+		struct Automobil* nou = (struct Aeroport*)malloc(sizeof(struct Automobil) * (*dim));
+
+		int k = 0;
+		for (int i = 0; i<nrAutomobil; i++)
+			if (a[i].nrRoti < pragRoti)
+				nou[k++] = initializare(a[i].denumire, a[i].nrRoti, a[i].pret);
+
+		return nou;
+	}	
+}
+
+struct Automobil* mutaVectorAutomobile(struct Automobil* a, float pretPrag, int* dimensiune, int* newDim) {
+	*newDim = 0;
+
+	for (int i = 0; i < *dimensiune; i++) {
+		if (a[i].pret > pretPrag)
+			(*newDim)++;
+	}
+
+	struct Automobil* copie = (struct Automobil*)malloc(*newDim * sizeof(struct Automobil));
+
+	int j = 0;
+	for (int i = 0; i < *dimensiune; i++) {
+		if (a[i].pret > pretPrag) {
+			copie[j++] = a[i];
+		}
+	}
+
+	j = 0;
+	for (int i = 0; i < *dimensiune; i++) {
+		if (a[i].pret <= pretPrag) {
+			a[j++] = a[i];
+		}
+	}
+	*dimensiune = j;
+	return copie;
+}
+
+//CONCATENARE
+struct Automobil* concatenareVectori(struct Automobil* Vector1, int dim1, struct Automobil* Vector2, int dim2, int* dimensiuneRezultat) {
+	
+	*dimensiuneRezultat = dim1 + dim2;
+
+	struct Automobil* rezultat = (struct Automobil*)malloc(*dimensiuneRezultat * sizeof(struct Automobil));
+
+	for (int i = 0; i < dim1; i++) {
+		rezultat[i] = Vector1[i];
+	}
+	for (int i = 0; i < dim2; i++) {
+		rezultat[dim1 + i] = Vector2[i];
+	}
+	return rezultat;
+}
+
+
+
+void afisareVector(struct Automobil* a, int nr)
+{
+	if (a != NULL)
+		for (int i = 0; i < nr; i++)
+			afisare(a[i]);
+}
+
+
+void dezalocare(struct Automobil** a, int* dim)
+{
+	if (*a != NULL) {
+		for (int i = 0; i < *dim; i++) {
+			free((*a)[i].denumire);
+		}
+		free(*a);
+		*a = NULL;
+		*dim = 0;
+	}
+}
+
+
+void main()
+{
+	/*struct Automobil automobil1;
+	automobil1 = citire();*/
+
+	//int nrAutomobile = 2;
+	//struct Automobil automobil2;
+	//struct Automobil automobil3;
+	//automobil2.denumire = (char*)malloc(strlen("Motocicleta") + 1);
+	//strcpy(automobil2.denumire, "Motocicleta");
+	//automobil2.nrRoti = 2;
+	//automobil2.pret = 900.5;
+	///*afisare(automobil2);*/
+
+	//automobil3.denumire = (char*)malloc(strlen("Avion") + 1);
+	//strcpy(automobil3.denumire, "Avion");
+	//automobil3.nrRoti = 4;
+	//automobil3.pret = 17800.66;
+	/*afisare(automobil3);*/
+
+
+	/*float max = maximPret(automobile,nrAutomobile);
+	printf("Maximul Pret: %.2f\n", max);*/
+
+	/*printf("\n");
+	float pretNou = 123445.99;
+	modificare(&automobil2, pretNou);
+	afisare(automobil2);*/
+
+	//TASK 2
+	int dimensiune=5;
+	struct Automobil* vector = (struct Automobil*)malloc(sizeof(struct Automobil) * (dimensiune));
+	vector[0] = initializare("masina", 4, 456);
+	vector[1] = initializare("motocicleta", 2, 1456);
+	vector[2] = initializare("autobuz", 8, 123456);
+	vector[3] = initializare("metrou", 40, 23456456.77);
+	vector[4] = initializare("tramvai", 10, 9123256.56);
+	afisareVector(vector, dimensiune);
+	printf("\n");
+
+	int* dim = 0;
+	struct Automobil* nou = vectorCopiat(vector, 10, dimensiune, &dim);
+	afisareVector(nou, dim);
+
+	printf("\n");
+	int* dimMutat = 0;
+	struct Automobil* mutat = mutaVectorAutomobile(vector, 10000.77, &dimensiune, &dimMutat);
+	afisareVector(mutat, dimMutat);
+	printf("\n");
+	afisareVector(vector, dimensiune);
+
+
+
+	printf("\n");
+	int* dimRezultat = 0;
+	struct Automobil* concatenat = concatenareVectori(nou, dim, mutat, dimMutat, &dimRezultat);
+	afisareVector(concatenat, dimRezultat);
+
+	//dezalocare(&vector, dimensiune);
+	//dezalocare(&nou, dim);
+	//dezalocare(&mutat, dimMutat);
+	//dezalocare(&concatenat, dimRezultat);
+	
+}
