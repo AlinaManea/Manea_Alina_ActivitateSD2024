@@ -58,7 +58,7 @@ void inserareArbore(Nod** radacina, Elev e)
 		nod->info = e;
 		nod->st = NULL;
 		nod->dr = NULL;
-     	*radacina = nod;
+		*radacina = nod;
 	}
 }
 
@@ -67,7 +67,7 @@ Elev citireElev(FILE* fp)
 	Elev e;
 	fscanf(fp, "%d", &e.id);
 	fscanf(fp, "%d", &e.nrMedii);
-	
+
 	e.medii = malloc(sizeof(float) * e.nrMedii);
 
 	for (int i = 0; i < e.nrMedii; i++)
@@ -166,7 +166,7 @@ void main()
 
 	Nod* arbore = citireFisier("Elev.txt");
 
-	afisareInOrder(arbore); 
+	afisareInOrder(arbore);
 
 	printf("Media este: %5.2f", calculeazaMedieGenerala(arbore));
 }
