@@ -1,0 +1,99 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<malloc.h>
+
+//1. structura
+struct Automobil
+{
+	char* denumire;
+	int nrRoti;
+	float pret;
+
+};
+
+//2. fct cititre
+struct Automobil citire() {
+	struct Automobil a;
+
+	char nume[100];
+	printf("Introduceti denumirea:");
+	scanf("%s", &nume);
+	a.denumire = (char*)malloc(sizeof(char) * (strlen(nume) + 1));
+	strcpy(a.denumire, nume);
+
+	printf("Introduceti nr roti:");
+	scanf("%d", &a.nrRoti);
+	printf("Introduceti pret:");
+	scanf("%f", &a.pret);
+
+	return a;
+}
+
+//3. functie calcul medie pret
+
+float maximPret(struct Automobil* automobile, int nrAutomobile)
+{
+	float maxim = automobile[0].pret;
+	for (int i = 0; i < nrAutomobile; i++)
+	{
+		if (automobile[i].pret > maxim)
+			maxim = automobile[i].pret;
+	}
+	return maxim;
+}
+
+//5. afisare
+void afisare(struct Automobil a)
+{
+	printf("Automobilul %s are %d roti si pretul de %5.2f.\n", a.denumire, a.nrRoti, a.pret);
+
+}
+
+//4.modificare camp din obiect
+
+void modificare(struct Automobil* a, float pretNou)
+{
+
+     a->pret = pretNou;
+
+}
+
+
+void main()
+{
+	struct Automobil automobil1;
+	automobil1 = citire();
+
+	int nrAutomobile = 2;
+	struct Automobil automobil2;
+	struct Automobil automobil3;
+	automobil2.denumire = (char*)malloc(strlen("Motocicleta") + 1);
+	strcpy(automobil2.denumire, "Motocicleta");
+	automobil2.nrRoti = 2;
+	automobil2.pret = 900.5;
+	afisare(automobil2);
+
+	automobil3.denumire = (char*)malloc(strlen("Avion") + 1);
+	strcpy(automobil3.denumire, "Avion");
+	automobil3.nrRoti = 4;
+	automobil3.pret = 17800.66;
+	afisare(automobil3);
+
+
+	struct Automobil* automobile = (struct Automobil*)malloc(sizeof(struct Automobil) * (nrAutomobile));
+	automobile[0] = automobil2;
+	automobile[1] = automobil3;
+
+	float max = maximPret(automobile,nrAutomobile);
+	printf("Maximul Pret: %.2f\n", max);
+
+	printf("\n");
+	float pretNou = 123445.99;
+	modificare(&automobil2, pretNou);
+	afisare(automobil2);
+
+	free(automobil1.denumire);
+	free(automobil2.denumire);
+	free(automobil3.denumire);
+	
+}
